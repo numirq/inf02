@@ -1,8 +1,0 @@
-# Linux - podstawy
-
-Linux to rodzina systemów opartych na jądrze Linux.
-
-## Cechy
-- open source
-- duża możliwość konfiguracji
-- popularny na serwerach i w programowaniu
