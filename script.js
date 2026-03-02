@@ -2,7 +2,7 @@ const CONFIG = {
   // Uzupełnij, aby GitHub API działało po publikacji.
   // Przykład: owner: "jan-kowalski", repo: "notatki-os"
   owner: "numirq",
-  repo: "testtttttttt",
+  repo: "inf02",
   branch: "main",
 };
 
