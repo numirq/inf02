@@ -9,7 +9,7 @@
   <body data-topic="windows">
     <header class="top-nav">
       <button class="nav-button" onclick="history.back()">← Wstecz</button>
-      <a class="nav-button home" href="index.html">Strona główna</a>
+      <button class="nav-button home" id="open-upload-modal" type="button">Dodaj notatkę</button>
     </header>
 
     <main class="notes-page">
@@ -26,6 +26,30 @@
         </article>
       </section>
     </main>
+
+    <div id="upload-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="upload-title">
+      <div class="modal-card">
+        <h2 id="upload-title">Dodaj notatkę do folderu Windows</h2>
+        <p class="panel-description">Plik zostanie dodany do repozytorium przez GitHub API.</p>
+
+        <label class="form-label" for="upload-password">Hasło uploadu</label>
+        <input id="upload-password" class="form-input" type="password" placeholder="Wpisz hasło" autocomplete="off" />
+
+        <label class="form-label" for="note-file">Wybierz plik</label>
+        <input id="note-file" class="form-input" type="file" />
+        <label class="form-checkbox">
+          <input id="overwrite-file" type="checkbox" />
+          Nadpisz plik, jeśli już istnieje
+        </label>
+
+        <p id="upload-status" class="upload-status" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button id="upload-submit" class="nav-button" type="button">Wyślij plik</button>
+          <button id="upload-cancel" class="nav-button" type="button">Anuluj</button>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
