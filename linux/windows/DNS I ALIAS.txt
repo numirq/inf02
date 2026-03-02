@@ -1,0 +1,59 @@
+
+
+Serwer DNS to usługa rozpoznawania nazw, która na podstawie nazwy (komputera) określa jego adres ip
+
+Sposoby działania serwera DNS:
+- strefa przeszukiwania w przód - tłumacz nazwy w sieci lokalnej na adres ip
+- strefa przeszukiwania wstecz - tłumaczy adresy ip w sieci na nazwy
+
+Strefy serwera
+- strefa podstawowa
+- strefa pomocnicza
+- strefa skrótowa
+
+Rodzaje rekordów stosowanych przez serwer dns
+- SOA (start of authority) - autoryzowany serwer dla strefy, może i musi być tylko jeden taki rekord dla strefy
+- A (adres ipv4) - rekord mapuje nazwe hosta do adresu ipv4
+- AAAA (adres ipv6) - rekord mapuje nazwe hosta do adresu ipv6
+- CNAME (canonical name) - określa alias nazwy hosta
+- PTR (pointer) - wskaźnik który mapuje adres ip do nazwy hosta (przy wstecznym wyszukiwaniu)
+- NS (name serwer) - określa serwera nazwy dla domeny dzięki czemu możliwe są wyszukiwania dns wewnątrz różnych stref 
+- MX (mail exchange) określa dla domeny serwera wymiany poczty elektronicznej 
+
+
+Instalacja serwera dns
+
+1. przygotowanie serwera (ip, nazwa)
+	sprawdzić czy ip jest dobre
+2. dodanie roli "DNS"
+3. zainstalowanie
+
+Utworzenie strefy wyszukiwania do przodu:
+kliknij na nazwe serwera 
+ prawy przycisk strefa wyszukiwania do przodu
+nowa strefa
+rozwiń
+prawym na ...bs.local.dns
+nowy host
+nazwa komputera i jego adres
+
+przed sprawdzeniem strefy wyszukiwania do przodu upewnij się ze klient ma przydzielony lub przypisany adres dns wskazujący na serwer
+
+jeżeli client pinguje serwer
+ale serwer nie pinguje clienta
+trzeba sprawdzić adres dns (lokalny) 127.0.0.1
+
+nslookup [pelna nazwa] (xx...xx.local)
+pokazuje czy działa
+
+
+Strefa do tuly 
+wejść w strefe do przodu prawym na komputer i zaznaczyć (ptr)
+
+
+Utworzenie aliasu do urządzenia:
+
+narzędzie dns
+prawym -> nowy alias
+nazwa aliasu
+w 3 opcji wybrać serwer/clienta
