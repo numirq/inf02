@@ -78,6 +78,11 @@ h1 {
   display: block;
 }
 
+.tile img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
 
 .tile span {
   font-size: 1.3rem;
