@@ -1,0 +1,36 @@
+instalacja i konfiguracja serwera wwww
+
+apt install apache2
+
+adres na komkuterze i serwerze
+i potem na przeglądarce
+
+
+konfiguracja
+
+/etc/apache2
+apache2.conf
+ports.conf
+httpd.conf
+
+podstawowa lokalizacja strony 
+/var/www/html
+
+podmiana domyślnego pliku na wlasna strone html
+mv index.html index.html.old
+
+aby strona mogła działać muszą być utworzone pliki w html lub php w odpowiedniej lokalizacji oprócz tego powinien być stworzony plik konfiguracyjny strony w lokalizacji /etc/apache2/sites-available/
+000-default.conf - plik konfiguracyjny strony Apacza
+i aby wlaczyc strone należy podlinkowac ll do /etc/apache2/sites-enable
+
+a2ensite
+
+/etc/apache2/sites-available/000-default.conf
+ServerName 
+
+utworz strone ulubionego klubu piłkarskiego pliki umieść w forlderze /var/www/html/nazwa utworz plik konfiguracyjny i podlinkuj do sites-enable
+
+ln -s [pierwszy plik] [drugi plik]
+edycja /etc/apache2/sites-available/[plik]
+
+a2ensite [początek pliku]
