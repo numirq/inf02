@@ -1,0 +1,31 @@
+INSTALACJA FTP
+
+apt install vsftpd
+
+service vsftpd status | restart
+
+apt install nmap
+nmap localhost
+
+cd /etc/vsftpd.conf
+
+Ćwiczenie1, konfiguracja serwera ftp dla uzytkownikow anonimowych
+
+tak ma być:
+anonymous_enable:YES
+local_enable:NO
+
+cd /srv/ftp
+
+Ćwiczenie2, konfiguracja do obsługi uzytkownikow lokalnych
+
+Na odwrot konfiguracja co do przedtem
+
+write_enable=YES
+ftpd_banner=Prywatny serwer FTP - powered by:vsfstpd
+
+kiedy tworzysz użytkownika to się robi w ftp home
+
+useradd -d /home/1TI -m 1TI
+
+passwd nazwa

@@ -1,0 +1,66 @@
+Konfiguracja zapory firewall w linux
+
+Trzy strumienie danych:
+Wejsciowe(INPUT)
+Wyjsciowy(OUTPUT)
+Przekazywany(FORWARD)
+
+Wiekszosc dystrybucji linuxa ma zainstalowana zapore iptables.
+
+Firewall podejmuje decyzje:
+-allow
+-deny,reject
+-limit
+
+ufw to nakladka .
+apt install ufw
+
+SSH:
+apt update
+apt install openssh-server
+service ssh status
+
+UFW:
+apt update
+apt install ufw
+etc/default/ufw
+
+ufw –h # pomoc dotycząca poleceń
+ufw disable | enable |status | reload | reset
+service ufw status | restart | stop
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow ssh
+… http
+… https
+… ftp
+Ufw allow from 192.168.0.1
+Ufw allow from 192.168.0.1 to any port 22
+Ufw allow from 192.168.0.1 to any port 80
+Ufw deny from 192.168.0.1
+
+ufw status numbered
+ufw delete 5
+
+NMAP:
+apt update
+apt install nmap
+nmap 127.0.0.1 #sprawdzenie otwartych portów
+
+Domyslna konfiguracja:
+ufw default deny incoming
+ufw default allow outgoing
+
+ufw allow ssh
+ufw reload
+
+
+Udostepnianie sieci internet z sieci zewnętrznej na siec lan
+Musi być brama i dns (brama: ip serwera)
+dns (serwer i 8.8.8.8)
+nano /etc/sysctl.conf
+pozbadz sie # z tego: net.ipv4.ip_forward=1
+reboot
+netplan robimy
+sysctl net.ipv4.ip_forward
+iptables -t nat -A POSTROUTING -s 192.168.X.0/24 -j MASQUERADE

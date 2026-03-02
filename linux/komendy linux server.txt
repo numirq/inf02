@@ -1,0 +1,84 @@
+Nawigacja po systemie plików
+pwd                      # pokaż, w jakim katalogu jesteś
+ls                       # lista plików i katalogów
+ls -l                    # szczegóły (uprawnienia, właściciel, rozmiar)
+ls -a                    # pokaż także pliki ukryte
+cd /ścieżka              # zmiana katalogu
+cd ..                    # wyjście o jeden poziom wyżej
+mkdir katalog            # utwórz katalog
+rmdir katalog            # usuń pusty katalog
+
+Operacje na plikach
+touch plik.txt           # utwórz pusty plik
+nano plik.txt            # edytuj plik w edytorze nano
+cat plik.txt             # pokaż zawartość pliku
+less plik.txt            # przeglądaj zawartość (scrollowanie strzałkami)
+head -n 10 plik.txt      # pierwsze 10 linii
+tail -n 10 plik.txt      # ostatnie 10 linii
+cp plik1 plik2           # kopiuj plik
+mv plik1 plik2           # przenieś/zmień nazwę
+rm plik.txt              # usuń plik
+rm -r katalog            # usuń katalog z zawartością
+
+Zarządzanie użytkownikami i grupami
+whoami                   # pokaż aktualnego użytkownika
+id                       # info o użytkowniku i grupach
+sudo adduser nazwa       # dodaj użytkownika
+sudo passwd nazwa        # ustaw/zmień hasło
+sudo deluser nazwa       # usuń użytkownika
+groups nazwa             # sprawdź grupy użytkownika
+sudo usermod -aG sudo nazwa   # dodaj użytkownika do grupy sudo
+
+Uprawnienia
+ls -l                    # pokaż prawa dostępu
+chmod 755 plik           # zmień prawa (rwxr-xr-x)
+chmod u+x plik.sh        # dodaj prawo wykonywania dla właściciela
+chown user:group plik    # zmień właściciela pliku
+
+Zarządzanie pakietami (APT)
+sudo apt update               # aktualizacja listy pakietów
+sudo apt upgrade              # instalacja aktualizacji
+sudo apt install pakiet       # instalacja programu
+sudo apt remove pakiet        # usuń program
+sudo apt autoremove           # usuń zbędne pakiety
+dpkg -l                       # lista zainstalowanych pakietów
+
+Sieć
+ip a                         # pokaż adresy IP
+ping 8.8.8.8                 # sprawdź połączenie z Google DNS
+ping google.com              # sprawdź połączenie z domeną
+hostname -I                  # pokaż IP serwera
+ss -tulnp                    # pokaż otwarte porty i procesy
+
+Procesy i system
+top                          # lista działających procesów
+htop                         # (lepsza wersja top, trzeba doinstalować)
+ps aux                       # pokaż wszystkie procesy
+kill -9 PID                  # zakończ proces po PID
+df -h                        # sprawdź zajętość dysków
+du -sh katalog               # rozmiar katalogu
+free -h                      # pamięć RAM
+uptime                       # jak długo działa system
+reboot                       # restart systemu
+shutdown now                 # wyłączenie systemu
+
+systemd
+systemctl status usługa      # status usługi
+sudo systemctl start usługa  # uruchom usługę
+sudo systemctl stop usługa   # zatrzymaj usługę
+sudo systemctl restart usługa # restart usługi
+sudo systemctl enable usługa  # włącz przy starcie systemu
+sudo systemctl disable usługa # wyłącz przy starcie systemu
+
+Firewall
+sudo ufw status              # status firewalla
+sudo ufw allow 22            # zezwól na SSH (port 22)
+sudo ufw allow 80            # zezwól na HTTP (port 80)
+sudo ufw allow 443           # zezwól na HTTPS (port 443)
+sudo ufw deny 21             # blokuj FTP (port 21)
+sudo ufw enable              # włącz firewall
+sudo ufw disable             # wyłącz firewall
+
+SSH
+ssh user@adres_IP            # połącz z serwerem
+exit                         # wyloguj się z sesji

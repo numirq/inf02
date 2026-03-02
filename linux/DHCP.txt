@@ -1,0 +1,23 @@
+Instalacja i konfiguracja serwera DHCP
+
+Zewnetrzna:080027E4E74D
+Wewnetrzna:0800270B9D06
+
+ZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZaporaZapora
+
+apt-get update
+apt install isc-dhcp-server
+cd /etc/default nano isc-dhcp-server
+daj do "" enp0s8
+
+cd /etc/dhcp nano dhcpd.conf
+
+aby dodac dns to dodaj pod option routers
+option domain-name-servers 8.8.8.8, 8.8.4.4;
+
+po każdej konfiguracji zrob to:
+service isc-dhcp-server restart
+service isc-dhcp-server status
+
+
+
