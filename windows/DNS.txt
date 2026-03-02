@@ -1,0 +1,57 @@
+DNS
+
+konfigurowanie i testowanie buforowego serwera nazw
+
+apt update
+sudo apt install bind9
+
+/etc/bind/
+named.conf
+named.conf.options
+named.conf.local
+
+service bind9 restart
+service bind9 status
+
+
+
+konfigurowanie podstawowego serwera nazw
+
+dodanie strefy wyszukiwania do przodu
+
+named.conf.local
+
+zone "zsp.local" IN {
+type master;
+file "/etc/bind/db.mzsp.local";
+};
+
+utworzyć plik konfiguracji (/etc/bind/db.mzsp.local)
+cp /etc/bind/db.local /etc/bind.db.mzsp.local  tak się kopiuje dobry plik konfuguracyjny
+
+edytujemy na linii SOA na 
+ns1.mzsp.local.
+root.mzsp.local.
+
+(server)IN	A	172.16.13.1
+(nazwa)	IN	A	172.16.13.5
+
+ping server.mzsp.local
+nslookup server.mzsp.local
+
+jak nie działa z serwera to trzeba dodac jego adres do dns serwera
+
+PTR-strefa do tylu
+
+wyszukiwanie wstecz 
+
+dodac do named.conf.local
+zone "13.16.172.in-addr.arpa; {
+type master;
+notify no;
+file "/etc/bind/db.13.16.172";
+};
+
+nano db.13.16.172
+1 (ip)	IN	PTR	server
+5 (ip)	IN	PTR	kiwi
