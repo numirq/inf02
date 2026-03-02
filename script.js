@@ -1,6 +1,7 @@
 const CONFIG = {
   // Uzupełnij, aby GitHub API działało po publikacji.
   // Przykład: owner: "jan-kowalski", repo: "notatki-os"
+  // Token do uploadu podaje się w formularzu "Kod uploadu (GitHub token)".
   owner: "numirq",
   repo: "inf02",
   branch: "main",
