@@ -1,12 +1,7 @@
 const CONFIG = {
-  // Uzupełnij, aby GitHub API działało po publikacji.
-  // Przykład: owner: "jan-kowalski", repo: "notatki-os"
-  // Token do uploadu podaje się w formularzu "Kod uploadu (GitHub token)".
   owner: "numirq",
   repo: "inf02",
   branch: "main",
-  uploadPassword: "zaq1@WSX",
-  uploadToken: "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",
 };
 
 const notesListElement = document.getElementById("notes-list");
@@ -20,12 +15,10 @@ if (topic && notesListElement && noteTitleElement && noteContentElement) {
 }
 
 async function loadNotes(folderName) {
-  renderMessage("Ładowanie listy notatek...");
+  renderMessage("ladowanie notatek");
 
   if (CONFIG.owner === "TWOJ_LOGIN_GITHUB" || CONFIG.repo === "TWOJE_REPO") {
-    renderMessage(
-      "Uzupełnij dane repozytorium w pliku script.js (CONFIG.owner i CONFIG.repo), aby pobrać notatki z GitHub API."
-    );
+    renderMessage();
     return;
   }
 
@@ -43,7 +36,7 @@ async function loadNotes(folderName) {
     const noteFiles = files.filter((file) => supportedExtensions.test(file.name));
 
     if (noteFiles.length === 0) {
-      renderMessage("Brak obsługiwanych plików (.txt, .md, .jpg, .png, .pdf itd.) w tym folderze.");
+      renderMessage();
       return;
     }
 
@@ -68,13 +61,13 @@ async function loadNotes(folderName) {
       }
     });
   } catch (error) {
-    renderMessage(`Nie udało się pobrać listy plików. ${error.message}`);
+    renderMessage(`nie udało sie pobrac listy plikow ${error.message}`);
   }
 }
 
 async function loadNoteContent(file) {
   noteTitleElement.textContent = file.name;
-  noteContentElement.innerHTML = "Ładowanie zawartości...";
+  noteContentElement.innerHTML = "ladowanie";
 
   const extension = (file.name.split(".").pop() || "").toLowerCase();
 
@@ -92,7 +85,7 @@ async function loadNoteContent(file) {
     const response = await fetch(file.download_url);
 
     if (!response.ok) {
-      throw new Error(`Błąd pobierania pliku: ${response.status}`);
+      throw new Error(`blad pobierania pliku ${response.status}`);
     }
 
     const content = await response.text();
@@ -101,7 +94,7 @@ async function loadNoteContent(file) {
     noteContentElement.innerHTML = "";
     noteContentElement.appendChild(pre);
   } catch (error) {
-    noteContentElement.textContent = `Nie udało się wczytać pliku. ${error.message}`;
+    noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
   }
 }
 
@@ -113,7 +106,7 @@ function renderImage(file) {
   image.loading = "lazy";
 
   image.addEventListener("error", () => {
-    noteContentElement.textContent = "Nie udało się wyświetlić obrazu.";
+    noteContentElement.textContent = "nie udalo sie wyswietlic";
   });
 
   noteContentElement.appendChild(image);
@@ -128,7 +121,7 @@ function renderPdf(file) {
 
   const fallback = document.createElement("p");
   fallback.className = "note-meta";
-  fallback.innerHTML = `Przeglądarka nie obsługuje osadzania PDF. <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">Otwórz plik PDF</a>.`;
+  fallback.innerHTML = `przegladarka nie obsloguje pdf <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otworz plik PDF</a>.`;
 
   object.appendChild(fallback);
   noteContentElement.appendChild(object);
@@ -142,7 +135,7 @@ function selectButton(activeButton) {
 
 function renderMessage(message) {
   notesListElement.innerHTML = "";
-  noteTitleElement.textContent = "Informacja";
+  noteTitleElement.textContent = "notatka";
   noteContentElement.textContent = message;
 }
 
@@ -183,21 +176,21 @@ function setupUploadModal() {
     const overwrite = overwriteInput.checked;
 
     if (!token) {
-      statusElement.textContent = "Wpisz GitHub token, aby wysłać plik.";
+      statusElement.textContent = "token";
       return;
     }
 
     if (!file) {
-      statusElement.textContent = "Wybierz plik do przesłania.";
+      statusElement.textContent = "wybierz plik";
       return;
     }
 
-    statusElement.textContent = "Wysyłanie pliku do GitHub...";
+    statusElement.textContent = "wysylanie";
     submitButton.disabled = true;
 
     try {
       await uploadFileToGitHub({ token, file, commitMessage, overwrite });
-      statusElement.textContent = "Plik dodany poprawnie. Odświeżam listę notatek...";
+      statusElement.textContent = "plik dodany";
       fileInput.value = "";
       overwriteInput.checked = false;
       await loadNotes(topic);
@@ -205,7 +198,7 @@ function setupUploadModal() {
         modal.hidden = true;
       }, 600);
     } catch (error) {
-      statusElement.textContent = `Błąd wysyłki: ${error.message}`;
+      statusElement.textContent = `blad ${error.message}`;
     } finally {
       submitButton.disabled = false;
     }
@@ -231,7 +224,7 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
   });
 
   if (existingResponse.status === 401) {
-    throw new Error("Błąd autoryzacji (401). Sprawdź token wpisany w polu \"Kod uploadu (GitHub token)\" oraz jego uprawnienia do odczytu/zapisu contents.");
+    throw new Error("blad token");
   }
 
   if (existingResponse.ok) {
@@ -239,12 +232,12 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
     sha = existingFile.sha;
 
     if (!overwrite) {
-      throw new Error("Plik już istnieje. Zaznacz opcję nadpisania, aby kontynuować.");
+      throw new Error("plik juz jest");
     }
   }
 
   if (!existingResponse.ok && existingResponse.status !== 404) {
-    throw new Error(`Nie udało się sprawdzić pliku docelowego (${existingResponse.status}).`);
+    throw new Error(`nie da sie sprawdzic (${existingResponse.status}).`);
   }
 
   const arrayBuffer = await file.arrayBuffer();
@@ -272,7 +265,7 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
 
   if (!uploadResponse.ok) {
     if (uploadResponse.status === 401) {
-      throw new Error("Błąd autoryzacji (401) przy zapisie. Sprawdź token wpisany w polu \"Kod uploadu (GitHub token)\" oraz uprawnienia do zapisu contents.");
+      throw new Error("cos tam tokenem jest nie tak");
     }
 
     const details = await safeJson(uploadResponse);
