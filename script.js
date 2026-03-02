@@ -5,7 +5,7 @@ const CONFIG = {
   repo: "inf02",
   branch: "main",
   uploadPassword: "zaq1@WSX",
-  uploadToken: "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",
+  uploadToken: "",
 };
 
 const notesListElement = document.getElementById("notes-list");
@@ -160,18 +160,18 @@ function setupUploadModal() {
   }
 
   openButton.addEventListener("click", () => {
-    modal.classList.remove("hidden");
+    modal.hidden = false;
     statusElement.textContent = "";
     passwordInput.value = "";
   });
 
   cancelButton.addEventListener("click", () => {
-    modal.classList.add("hidden");
+    modal.hidden = true;
   });
 
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
-      modal.classList.add("hidden");
+      modal.hidden = true;
     }
   });
 
@@ -208,7 +208,7 @@ function setupUploadModal() {
       overwriteInput.checked = false;
       await loadNotes(topic);
       setTimeout(() => {
-        modal.classList.add("hidden");
+        modal.hidden = true;
       }, 600);
     } catch (error) {
       statusElement.textContent = `Błąd wysyłki: ${error.message}`;
@@ -218,17 +218,27 @@ function setupUploadModal() {
   });
 }
 
+
+function createAuthHeader(token) {
+  return token.startsWith("github_pat_") ? `token ${token}` : `Bearer ${token}`;
+}
+
 async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
   const path = `${topic}/${encodeURIComponent(file.name)}`;
   const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}`;
+  const authHeader = createAuthHeader(token);
 
   let sha;
   const existingResponse = await fetch(`${apiUrl}?ref=${CONFIG.branch}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: authHeader,
       Accept: "application/vnd.github+json",
     },
   });
+
+  if (existingResponse.status === 401) {
+    throw new Error("Błąd autoryzacji (401). Sprawdź CONFIG.uploadToken i uprawnienia tokenu (repo contents: read/write).");
+  }
 
   if (existingResponse.ok) {
     const existingFile = await existingResponse.json();
@@ -259,7 +269,7 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
   const uploadResponse = await fetch(apiUrl, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: authHeader,
       Accept: "application/vnd.github+json",
       "Content-Type": "application/json",
     },
@@ -267,6 +277,10 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
   });
 
   if (!uploadResponse.ok) {
+    if (uploadResponse.status === 401) {
+      throw new Error("Błąd autoryzacji (401) przy zapisie. Sprawdź CONFIG.uploadToken i uprawnienia tokenu do zapisu.");
+    }
+
     const details = await safeJson(uploadResponse);
     const message = details?.message || `GitHub API zwróciło ${uploadResponse.status}`;
     throw new Error(message);
