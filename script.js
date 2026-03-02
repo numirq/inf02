@@ -4,6 +4,8 @@ const CONFIG = {
   owner: "numirq",
   repo: "inf02",
   branch: "main",
+  uploadPassword: "zaq1@WSX",
+  uploadToken: "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",
 };
 
 const notesListElement = document.getElementById("notes-list");
