@@ -231,7 +231,7 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
   });
 
   if (existingResponse.status === 401) {
-    throw new Error("Błąd autoryzacji (401). Sprawdź CONFIG.uploadToken i uprawnienia tokenu (repo contents: read/write).");
+    throw new Error("Błąd autoryzacji (401). Sprawdź token wpisany w polu \"Kod uploadu (GitHub token)\" oraz jego uprawnienia do odczytu/zapisu contents.");
   }
 
   if (existingResponse.ok) {
@@ -272,7 +272,7 @@ async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
 
   if (!uploadResponse.ok) {
     if (uploadResponse.status === 401) {
-      throw new Error("Błąd autoryzacji (401) przy zapisie. Sprawdź CONFIG.uploadToken i uprawnienia tokenu do zapisu.");
+      throw new Error("Błąd autoryzacji (401) przy zapisie. Sprawdź token wpisany w polu \"Kod uploadu (GitHub token)\" oraz uprawnienia do zapisu contents.");
     }
 
     const details = await safeJson(uploadResponse);
