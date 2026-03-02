@@ -43,10 +43,11 @@ h1 {
 
 .tiles {
   display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 260px));
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(220px, 220px));
+  justify-content: center;
+  gap: 2.75rem;
   width: 100%;
-  max-width: 620px;
+  max-width: 760px;
 }
 
 .tile {
@@ -70,11 +71,13 @@ h1 {
   border-color: var(--accent);
 }
 
-.tile img {
+.tile .system-logo {
   width: 90px;
   height: 90px;
   object-fit: contain;
+  display: block;
 }
+
 
 .tile span {
   font-size: 1.3rem;
