@@ -150,7 +150,7 @@ function setupUploadModal() {
   const modal = document.getElementById("upload-modal");
   const cancelButton = document.getElementById("upload-cancel");
   const submitButton = document.getElementById("upload-submit");
-  const passwordInput = document.getElementById("upload-password");
+  const tokenInput = document.getElementById("upload-token");
   const fileInput = document.getElementById("note-file");
   const overwriteInput = document.getElementById("overwrite-file");
   const statusElement = document.getElementById("upload-status");
@@ -162,7 +162,7 @@ function setupUploadModal() {
   openButton.addEventListener("click", () => {
     modal.hidden = false;
     statusElement.textContent = "";
-    passwordInput.value = "";
+    tokenInput.value = "";
   });
 
   cancelButton.addEventListener("click", () => {
@@ -176,20 +176,13 @@ function setupUploadModal() {
   });
 
   submitButton.addEventListener("click", async () => {
-    const password = passwordInput.value;
+    const token = tokenInput.value.trim();
     const file = fileInput.files?.[0];
     const commitMessage = "nowa notatka";
     const overwrite = overwriteInput.checked;
 
-    if (password !== CONFIG.uploadPassword) {
-      statusElement.textContent = "Nieprawidłowe hasło uploadu.";
-      return;
-    }
-
-    const token = CONFIG.uploadToken.trim();
-
     if (!token) {
-      statusElement.textContent = "Brak tokenu w konfiguracji script.js (CONFIG.uploadToken).";
+      statusElement.textContent = "Wpisz GitHub token, aby wysłać plik.";
       return;
     }
 
