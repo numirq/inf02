@@ -96,7 +96,6 @@ async function loadNoteContent(file) {
     pre.textContent = content;
     noteContentElement.innerHTML = "";
     noteContentElement.appendChild(pre);
-    appendDownloadMeta(file);
   } catch (error) {
     noteContentElement.textContent = `Nie udało się wczytać pliku. ${error.message}`;
   }
@@ -114,7 +113,6 @@ function renderImage(file) {
   });
 
   noteContentElement.appendChild(image);
-  appendDownloadMeta(file);
 }
 
 function renderPdf(file) {
@@ -130,15 +128,8 @@ function renderPdf(file) {
 
   object.appendChild(fallback);
   noteContentElement.appendChild(object);
-  appendDownloadMeta(file);
 }
 
-function appendDownloadMeta(file) {
-  const meta = document.createElement("p");
-  meta.className = "note-meta";
-  meta.innerHTML = `Źródło: <a href="${file.html_url}" target="_blank" rel="noopener noreferrer">${file.name}</a>`;
-  noteContentElement.appendChild(meta);
-}
 
 function selectButton(activeButton) {
   const buttons = notesListElement.querySelectorAll("button");
