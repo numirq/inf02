@@ -5,7 +5,7 @@ const CONFIG = {
   repo: "inf02",
   branch: "main",
   uploadPassword: "zaq1@WSX",
-  uploadToken: "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",
+  uploadToken: "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",
 };
 
 const notesListElement = document.getElementById("notes-list");
