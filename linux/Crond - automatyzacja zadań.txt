@@ -1,0 +1,45 @@
+Crond - automatyzacja zadań
+
+
+do obsługi zadań można wykorzystać demony atd i crond
+at wykorzystuje demona atd do jednokrotnego wykonywania polecenia w zadanym czasie
+
+jak zezwolić użytkownikowi
+/etc/at.allow     - zawiera liste urzytkownikow którzy maja prawo uruchamiania at
+/etc/at.deny      - zawiera liste urzytkownikow którzy nie maja prawa uruchamiana at 
+
+at 18:21
+at 18:23 07.01.19  dd/mm/yy
+at 4mp + 3 days
+at 10am Jul 31 04 
+
+sudo apt install at
+
+at now +5 min
+plik.txt
+at now +10 min
+ls /etc/plik.txt
+atq - wyświetl kolejke zadań
+atrm 2 - usun zadanie nr 2
+
+
+sudo service cron stop|start|restart
+/etc/cron.allow
+/etc/cron.deny
+
+Cron co minute przegląda katalog   /var/spool/cron    w poszukiwaniu plików-tabel nazwanych według kont
+
+Do zakładania usuwania lub przeglądania zawartości tabel używanych przez cron słuzy program crontab
+crontab -e    - edycja listy
+crontab -l    - wyświetlanie listy zadań
+crontab -r    - usuwanie listy zadań
+
+Minuty	Godziny	Dni miesiąca	Miesiące	Dni tygodnia	Zadanie
+
+
+
+crontab -e 
+* * * * * echo "co 1 min" >> /root/cron.txt
+*/2 * * * * echo "co 1 min" >> /root/cron.txt
+crontab -l
+crontab -r
