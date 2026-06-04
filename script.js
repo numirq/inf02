@@ -89,10 +89,7 @@ async function loadNoteContent(file) {
     }
 
     const content = await response.text();
-    const pre = document.createElement("pre");
-    pre.textContent = content;
-    noteContentElement.innerHTML = "";
-    noteContentElement.appendChild(pre);
+    renderTextContent(content);
   } catch (error) {
     noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
   }
@@ -125,6 +122,53 @@ function renderPdf(file) {
 
   object.appendChild(fallback);
   noteContentElement.appendChild(object);
+}
+
+function renderTextContent(content) {
+  if (topic === "linki") {
+    renderLinkiContent(content);
+    return;
+  }
+
+  noteContentElement.innerHTML = "";
+  const pre = document.createElement("pre");
+  pre.textContent = content;
+  noteContentElement.appendChild(pre);
+}
+
+function renderLinkiContent(content) {
+  noteContentElement.innerHTML = "";
+  const lines = content.split(/\r?\n/);
+  const container = document.createElement("div");
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      container.appendChild(document.createElement("br"));
+      return;
+    }
+
+    if (/^https?:\/\//i.test(trimmed)) {
+      const link = document.createElement("a");
+      link.href = trimmed;
+      link.textContent = trimmed;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.className = "note-link";
+
+      const listItem = document.createElement("div");
+      listItem.appendChild(link);
+      container.appendChild(listItem);
+      return;
+    }
+
+    const paragraph = document.createElement("p");
+    paragraph.textContent = line;
+    container.appendChild(paragraph);
+  });
+
+  noteContentElement.appendChild(container);
 }
 
 function selectButton(activeButton) {

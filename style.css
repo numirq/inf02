@@ -169,6 +169,14 @@ h1 {
   margin: 0;
 }
 
+.note-content .note-link {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: underline;
+  word-break: break-word;
+  margin-bottom: 0.5rem;
+}
+
 .note-content img,
 .note-content object,
 .note-content iframe {
