@@ -138,7 +138,7 @@ chmod 755 /home/uzytkownik
 
 /etc/vsftpd.conf
 
-listen=YES
+listen=NO
 anonymous_enable=NO
 local_enable=YES
 write_enable=YES
