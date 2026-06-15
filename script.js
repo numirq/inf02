@@ -32,7 +32,7 @@ async function loadNotes(folderName) {
     }
 
     const files = await response.json();
-    const supportedExtensions = /\.(txt|md|jpg|jpeg|png|gif|webp|pdf|xlsx)$/i;
+    const supportedExtensions = /\.(txt|md|jpg|jpeg|png|gif|webp|pdf)$/i;
     const noteFiles = files.filter((file) => supportedExtensions.test(file.name));
 
     if (noteFiles.length === 0) {
@@ -76,7 +76,7 @@ async function loadNoteContent(file) {
     return;
   }
 
-  if (extension === "pdf", "xlsx") {
+  if (extension === "pdf") {
     renderPdf(file);
     return;
   }
