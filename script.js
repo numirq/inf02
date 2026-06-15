@@ -81,18 +81,23 @@ async function loadNoteContent(file) {
     return;
   }
 
-  try {
-    const response = await fetch(file.download_url);
+  if (["txt", "md"].includes(extension)) {
+    try {
+      const response = await fetch(file.download_url);
 
-    if (!response.ok) {
-      throw new Error(`blad pobierania pliku ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`blad pobierania pliku ${response.status}`);
+      }
+
+      const content = await response.text();
+      renderTextContent(content);
+    } catch (error) {
+      noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
     }
-
-    const content = await response.text();
-    renderTextContent(content);
-  } catch (error) {
-    noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
+    return;
   }
+
+  noteContentElement.textContent = `nieobsługiwany format: ${extension}`;
 }
 
 function renderImage(file) {
