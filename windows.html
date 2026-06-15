@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notatki Windows</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-topic="windows">
+    <header class="top-nav">
+      <button class="nav-button" onclick="history.back()">← wstecz</button>
+    </header>
+
+    <main class="notes-page">
+      <aside class="notes-list-panel">
+        <h1>Notatki Windows</h1>
+        <p class="panel-description"></p>
+        <ul id="notes-list" class="notes-list" aria-live="polite"></ul>
+      </aside>
+
+      <section class="note-content-panel">
+        <h2 id="note-title">wybierz notatke</h2>
+        <article id="note-content" class="note-content">
+          tu notatka
+        </article>
+      </section>
+    </main>
+
+    <div id="upload-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="upload-title">
+      <div class="modal-card">
+        <h2 id="upload-title">nie dziala</h2>
+        <p class="panel-description">nie dziala</p>
+
+        <label class="form-label" for="upload-token">nie dziala</label>
+        <input id="upload-token" class="form-input" type="password" placeholder="github_pat_..." autocomplete="off" />
+
+        <label class="form-label" for="note-file">Wybierz plik</label>
+        <input id="note-file" class="form-input" type="file" />
+        <label class="form-checkbox">
+          <input id="overwrite-file" type="checkbox" />
+          nie dziala
+        </label>
+
+        <p id="upload-status" class="upload-status" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button id="upload-submit" class="nav-button" type="button">wyslij</button>
+          <button id="upload-cancel" class="nav-button" type="button">anuluj</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

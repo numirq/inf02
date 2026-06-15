@@ -1,0 +1,18 @@
+Arkusz 1
+
+1. Dysk zapasowy montaż 
+2. Router 
+- Ip 
+- Dhcp (zakres)
+- Rezerwacja (leases)
+3. Switch
+- Vlan
+- L3 (system info) zmienia się ID
+5. Diagnostyka stacji roboczej (Linux)
+- lshw lub ustawienia > informacje
+6. Stacja robocza system windows 
+- Karta sieciowa
+- Utworzenie konta i dodanie do grupy (zarządzanie systemem)
+- Skonfigurowanie dysku sieciowego ( system plikow, etykieta, litera dysku
+- Udostepnienie zapasowego dysku ( pełne uprawnienia administratorzy
+7. kosztorys ( Arkusz 1 )
