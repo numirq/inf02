@@ -32,7 +32,7 @@ async function loadNotes(folderName) {
     }
 
     const files = await response.json();
-    const supportedExtensions = /\.(txt|md|jpg|jpeg|png|gif|webp|pdf)$/i;
+    const supportedExtensions = /\.(txt|md|jpg|jpeg|png|gif|webp|pdf|xlsx)$/i;
     const noteFiles = files.filter((file) => supportedExtensions.test(file.name));
 
     if (noteFiles.length === 0) {
@@ -71,12 +71,12 @@ async function loadNoteContent(file) {
 
   const extension = (file.name.split(".").pop() || "").toLowerCase();
 
-  if (["jpg", "jpeg", "png", "gif", "webp", "xlsx"].includes(extension)) {
+  if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
     renderImage(file);
     return;
   }
 
-  if (extension === "pdf") {
+  if (extension === "pdf", "xlsx") {
     renderPdf(file);
     return;
   }
