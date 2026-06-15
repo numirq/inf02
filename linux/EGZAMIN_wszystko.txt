@@ -158,7 +158,9 @@ browseable = yes
 writable = yes
 guest ok = yes
 read only = no
+-- valid user = {user}
 
+smbpasswd -a user
 smbpasswd -a user
 
 service smbd restart
