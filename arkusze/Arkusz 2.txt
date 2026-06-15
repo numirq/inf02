@@ -1,0 +1,35 @@
+Arkusz 2
+
+1. Kabel {drut} ( patch panel -- keystone  standard B ) Montaż patch panelu do szafy
+2. Diagnostyka stacji roboczej (Linux)
+- lshw lub ustawienia > informacje
+3. Router 
+- Ip 
+- Dhcp (zakres)
+- Rezerwacja (leases)
+4. Switch
+- Vlan
+- L3 (system info) zmienia się ID
+6. Windows serwer
+- Interfejsy zgodnie z tabela
+- Odnowienie dzierżawy dhcp ( ipconfig /renew )
+- Zmiana nazwy komputera ( Serwer lokalny > nazwa komputera )
+- Serwer WDS (dodaj role {Serwer sieci Web (IIS) {Usługi drukowania i zarządzania dokumentami} )
+- Dodaj FTP
+- Usługi drukowania i zarządzania dokumentami ( Serwer wydruku )
+- Wydrukowanie pliku z C:/MOJE_FTP
+- Konfiguracja FTP ( stworzenie nowej witryny -> INF_FTP  ścieżka -> C:/MOJE_FTP przypisanie adresu DHCP {192.168.100.50} (LAN1) bez SSL
+- Urzytkownicy Anonimowi - Odczyt
+- Urzytkownicy podstawowi (administrator) - Zapis Odczyt
+7. Skonfuguruj Maszyne Linux desktop
+- Nazwa karty ( Tożsamość )
+- Adres ( IPV4 )
+- cd home/administrator
+mkdir USB
+cd USB
+mkdir LINUX_TERMINAL
+grupadd Technicy
+useradd Student1
+passwd Student1
+usermod -g Technicy Student1
+- Filezilla
