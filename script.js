@@ -76,8 +76,8 @@ async function loadNoteContent(file) {
     return;
   }
 
-  if (extension === "pdf", "xlsx") {
-    renderPdf(file);
+  if (["pdf", "xlsx"].includes(extension)) {
+    renderDocument(file, extension);
     return;
   }
 
@@ -109,19 +109,38 @@ function renderImage(file) {
   noteContentElement.appendChild(image);
 }
 
-function renderPdf(file) {
+function renderDocument(file, extension) {
   noteContentElement.innerHTML = "";
 
-  const object = document.createElement("object");
-  object.data = file.download_url;
-  object.type = "application/pdf";
+  if (extension === "pdf") {
+    const object = document.createElement("object");
+    object.data = file.download_url;
+    object.type = "application/pdf";
 
-  const fallback = document.createElement("p");
-  fallback.className = "note-meta";
-  fallback.innerHTML = `przegladarka nie obsloguje pdf <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otworz plik PDF</a>.`;
+    const fallback = document.createElement("p");
+    fallback.className = "note-meta";
+    fallback.innerHTML = `przegladarka nie obsługuje PDF. <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otwórz plik PDF</a>.`;
 
-  object.appendChild(fallback);
-  noteContentElement.appendChild(object);
+    object.appendChild(fallback);
+    noteContentElement.appendChild(object);
+    return;
+  }
+
+  const message = document.createElement("p");
+  message.className = "note-meta";
+  message.innerHTML = `Plik <strong>${file.name}</strong> nie może być wyświetlony w przeglądarce. <a href="${file.download_url}" target="_blank" rel="noopener noreferrer" download>Kliknij, aby pobrać</a>.`;
+  noteContentElement.appendChild(message);
+
+  const downloadLink = document.createElement("a");
+  downloadLink.href = file.download_url;
+  downloadLink.download = file.name;
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+
+  window.requestAnimationFrame(() => {
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  });
 }
 
 function renderTextContent(content) {
