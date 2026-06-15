@@ -70,6 +70,7 @@ ln -s /etc/apache2/sites-available/[plik].conf /etc/apache2/sites-enabled/[plik]
 ###DNS
 apt install bind9
 service bind9 status/restart
+named-checkconf -- sprawdzanie bledow
 
 /etc/bind/
 named.conf
