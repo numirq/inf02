@@ -16,3 +16,4 @@ Arkusz 1
 - Skonfigurowanie dysku sieciowego ( system plikow, etykieta, litera dysku
 - Udostepnienie zapasowego dysku ( pełne uprawnienia administratorzy
 7. kosztorys ( Arkusz 1 )
+https://github.com/numirq/inf02/blob/main/arkusze/Kosztorys%20Arkusz%201.xlsx
