@@ -158,7 +158,7 @@ browseable = yes
 writable = yes
 guest ok = yes
 read only = no
--- valid user = {user}
+{niepewne} valid user = {user}
 
 smbpasswd -a user
 smbpasswd -a user
