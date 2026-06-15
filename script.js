@@ -71,7 +71,7 @@ async function loadNoteContent(file) {
 
   const extension = (file.name.split(".").pop() || "").toLowerCase();
 
-  if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
+  if (["jpg", "jpeg", "png", "gif", "webp", "xlsx"].includes(extension)) {
     renderImage(file);
     return;
   }
