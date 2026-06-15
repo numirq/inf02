@@ -76,28 +76,23 @@ async function loadNoteContent(file) {
     return;
   }
 
-  if (["pdf", "xlsx"].includes(extension)) {
-    renderDocument(file, extension);
+  if (extension === "pdf", "xlsx") {
+    renderPdf(file);
     return;
   }
 
-  if (["txt", "md"].includes(extension)) {
-    try {
-      const response = await fetch(file.download_url);
+  try {
+    const response = await fetch(file.download_url);
 
-      if (!response.ok) {
-        throw new Error(`blad pobierania pliku ${response.status}`);
-      }
-
-      const content = await response.text();
-      renderTextContent(content);
-    } catch (error) {
-      noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
+    if (!response.ok) {
+      throw new Error(`blad pobierania pliku ${response.status}`);
     }
-    return;
-  }
 
-  noteContentElement.textContent = `nieobsługiwany format: ${extension}`;
+    const content = await response.text();
+    renderTextContent(content);
+  } catch (error) {
+    noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
+  }
 }
 
 function renderImage(file) {
@@ -114,38 +109,19 @@ function renderImage(file) {
   noteContentElement.appendChild(image);
 }
 
-function renderDocument(file, extension) {
+function renderPdf(file) {
   noteContentElement.innerHTML = "";
 
-  if (extension === "pdf") {
-    const object = document.createElement("object");
-    object.data = file.download_url;
-    object.type = "application/pdf";
+  const object = document.createElement("object");
+  object.data = file.download_url;
+  object.type = "application/pdf";
 
-    const fallback = document.createElement("p");
-    fallback.className = "note-meta";
-    fallback.innerHTML = `przegladarka nie obsługuje PDF. <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otwórz plik PDF</a>.`;
+  const fallback = document.createElement("p");
+  fallback.className = "note-meta";
+  fallback.innerHTML = `przegladarka nie obsloguje pdf <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otworz plik PDF</a>.`;
 
-    object.appendChild(fallback);
-    noteContentElement.appendChild(object);
-    return;
-  }
-
-  const message = document.createElement("p");
-  message.className = "note-meta";
-  message.innerHTML = `Plik <strong>${file.name}</strong> nie może być wyświetlony w przeglądarce. <a href="${file.download_url}" target="_blank" rel="noopener noreferrer" download>Kliknij, aby pobrać</a>.`;
-  noteContentElement.appendChild(message);
-
-  const downloadLink = document.createElement("a");
-  downloadLink.href = file.download_url;
-  downloadLink.download = file.name;
-  downloadLink.style.display = "none";
-  document.body.appendChild(downloadLink);
-
-  window.requestAnimationFrame(() => {
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  });
+  object.appendChild(fallback);
+  noteContentElement.appendChild(object);
 }
 
 function renderTextContent(content) {
