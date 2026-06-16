@@ -33,11 +33,11 @@ dxdiag
 ipconfig /release --> nie masz ani adresu ani nic w windows
 ipconfig /renew --> żąda nowy adres od DHCP w windows
 ipconfig /flushdns --> zresetowanie DNS w windows
-net use * /delete --> jak się robi sambe i żeby się przelogować to trzeba wyłączyć eksplorator plików, następnie w cmd wpisać tą komendę, wpisać T (czy tam yes nie pamiętam) i w menadżerze zadań znaleźć eksplorator.exe, PPM i dać uruchom ponownie
+net use * /delete --> jak się robi sambe i żeby się przelogować to trzeba wyłączyć eksplorator plików, następnie w cmd wpisać tą komendę, wpisać T (czy tam yes nie pamiętam) i w menadżerze zadań znaleźć explorer.exe, PPM i dać uruchom ponownie
 
 SIECI / OKABLOWANIE
 
-Kabel krosowy (często nazywany patchcordem) to krótki, elastyczny przewód używany do łączenia urządzeń w sieciach komputerowych lub systemach audio/wideo
+Kabel krosowy (często nazywany patchcordem) to krótki, elastyczny przewód używany do łączenia urządzeń w sieciach komputerowych lub systemach audio/wideo 
 kabla krosowanego (tzw. crossovera), który jest specjalnym rodzajem patchcordu służącym do bezpośredniego łączenia dwóch urządzeń tego samego typu (np. komputer-komputer).
 
 LOSOWA NOTATKA FILIPA
@@ -76,3 +76,10 @@ System
 uname -a
 hostnamectl
 lsb_release - a
+
+PRZYKLADOWE KOMENDY DO PLIKU
+ip a >> kartysieciowe.txt
+ip lspci | grep "VGA" >> grafika.txt
+
+PRZYKLADOWA KONFIGURACJA DO PLIKU
+cat /etc/ssh/sshd_config >> /KOPIE/sshd_config.kopia
