@@ -1,0 +1,46 @@
+lshw - do sprawdzania RAM CPU GPU płyta główna i dyski  (LINUX)
+dmidecode - model producent płyty głównej, sloty RAM wersja BIOS  (LINUX)
+monitor wydajności - usuń wszystkie liczniki - nowy licznik - dysk fizyczny - czas odczytu dysku w %
+dxdiag - info o GPU, sterownikach audio DirectX i sprzęcie multimedialnym
+menedżer zadań – wydajność – CPU -wirtualizacja
+jak wyłączyć kalkulator
+secpol.msc - zasady zabezpieczeń lokalnych (np. do zablokowania konta po np. 5 nieudanych próbach logowania)
+gpedit.msc - zasady grupy 
+compmgmt.msc - zarzadzanie komputerem 
+arkusze pl styczeń 25
+named-checkconf --> w systemach Linux służące do sprawdzania poprawności składni plików konfiguracyjnych serwera DNS BIND / ewentualnie mozna napisac do jakiego pliku --> named-checkconf /etc/bind/db.mzsp.local
+uname -r --> do sprawdzania wersji systemu linux
+dmidecode --> trzeba pobrac i na linux pokazuje podzespoly itp
+lshw --> bez pobierania i na linux tez pokazuje podzespoly itp
+named-checkconf  -->  w systemach Linux służące do sprawdzania poprawności składni plików konfiguracyjnych serwera DNS BIND / ewentualnie mozna napisac do jakiego pliku --> named-checkconf /etc/bind/db.mzsp.local 
+msinfo32
+dxdiag
+
+systemctl enable --now (nazwa uslug)  --> automatyczne odpalanie uslugi, przy odpaleniu kompa
+
+
+
+net use * /delete --> jak się robi sambe i żeby się przelogować to trzeba wyłączyć eksplorator plików, następnie w cmd wpisać tą komendę, wpisać T (czy tam yes nie pamiętam) i w menadżerze zadań znaleźć eksplorator.exe, PPM i dać uruchom ponownie
+
+
+
+ipconfig /release  --> nie masz ani adresu ani nic w windows
+ipconfig /renew  --> żąda nowy adres od DHCP w windows
+ipconfig /flushdns  --> zresetowanie DNS w windows
+
+
+
+Kabel krosowy (często nazywany patchcordem) to krótki, elastyczny przewód używany do łączenia urządzeń w sieciach komputerowych lub systemach audio/wideo
+kabla krosowanego (tzw. crossovera), który jest specjalnym rodzajem patchcordu służącym do bezpośredniego łączenia dwóch urządzeń tego samego typu (np. komputer-komputer).
+
+
+
+
+
+enp0s8:
+  dhcp4: false
+  set-name: "vlan100"
+  match:
+    name: "enp0s8"
+
+w name się daje nazwę karty sieciowej a w set-name daje się nazwę taką jaką się chce
