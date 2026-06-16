@@ -28,8 +28,14 @@ jak wyłączyć kalkulator
 secpol.msc - zasady zabezpieczeń lokalnych (np. do zablokowania konta po np. 5 nieudanych próbach logowania)
 gpedit.msc - zasady grupy
 compmgmt.msc - zarzadzanie komputerem
-msinfo32
-dxdiag
+msinfo32 - Informacje o systemie – szczegółowe dane o komputerze, sprzęcie i oprogramowaniu.
+dxdiag - Narzędzie diagnostyczne DirectX – informacje o sprzęcie, sterownikach i grafice.
+lusrmgr.msc - Zarządzanie lokalnymi użytkownikami i grupami (tworzenie kont, zmiana uprawnień). Dostępne głównie w wersjach Pro/Enterprise.
+regedit - Edytor rejestru Windows.
+perfmon.msc - Monitor wydajności - analiza obciążenia systemu i zasobów
+taskmgr - menadżer zadań
+
+
 ipconfig /release --> nie masz ani adresu ani nic w windows
 ipconfig /renew --> żąda nowy adres od DHCP w windows
 ipconfig /flushdns --> zresetowanie DNS w windows
