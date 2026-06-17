@@ -99,3 +99,9 @@ ip lspci | grep "VGA" >> grafika.txt
 
 PRZYKLADOWA KONFIGURACJA DO PLIKU
 cat /etc/ssh/sshd_config >> /KOPIE/sshd_config.kopia
+
+jakieś komendy mateusza
+gpupdate /force --> wymusza natychmiastowe zastosowanie zmian z gpmc.msc na komputerze klienckim. 
+gpmc.msc --> Zarządzanie zasadami grupy w domenie 
+
+win + r --> gpmc.msc --> rozwiń las --> rozwiń domeny --> rozwiń swoja domene (np. egzamin.local) --> rozwiń Komputery pracowników --> PPM na Komputery pracownikow --> Utwórz obiekt zasad grupy w tej domenie i umieść tu link --> wpisuje sie nazwe jaka sie chce np Instalacja 7-Zip --> OK --> PPM na nowa zasadę --> Edytuj --> wejdzie teraz do edytora zarządzania zasadami grupy dla tej zasady --> rozwiń Konfiguracja komputera --> rozwiń Zasady --> rozwiń Ustawienia oprogramowania --> rozwiń Instalacja oprogramowania --> PPM na Instalacja oprogramowania --> Nowy --> Pakiet --> wybiera się pakiet taki jak w arkuszu (w arkuszu 9 to jest C:/Programy/7-Zip.msi) (ten plik sie kopiuje z pendrive na egzaminie) --> Kliknac na to i potem otwórz --> Przypisany --> OK.                 Potem sie wpisuje w cmd gpupdate /force a potem sie wylacza i wlacza kompa (wtedy powinno zainstalowac ten plik na klienta)
