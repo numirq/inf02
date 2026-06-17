@@ -89,8 +89,8 @@ file "/etc/bind/db.mzsp.local";
 tworzenie pliku konfiguracyjnego
 cp /etc/bind/db.local /etc/bind/db.mzsp.local
 
-edytujemy na linii SOA na 
-ns1.mzsp.local. root.mzsp.local.
+tego nie /// edytujemy na linii SOA na 
+tego nie /// ns1.mzsp.local. root.mzsp.local.
 
 (serwer)    IN	A	(adres serwera)
 (nazwa)     IN	A	(adres komputera)
@@ -118,8 +118,8 @@ file "/etc/bind/db.10.168.192";
 tworzenie pliku konfiguracyjnego
 cp /etc/bind/db.local /etc/bind/db.10.168.192
 
-edytujemy na linii SOA na 
-ns1.mzsp.local. root.mzsp.local.
+tego nie ///edytujemy na linii SOA na 
+tegp nie ///ns1.mzsp.local. root.mzsp.local.
 
 1 (koncowka adresu serwera)    IN	PTR	(nazwa serwera).mzsp.local.
 60 (koncowka adresu komputera)  IN	PTR	(nazwa komputera).mzsp.local.
