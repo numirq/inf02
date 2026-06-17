@@ -41,6 +41,16 @@ ipconfig /renew --> żąda nowy adres od DHCP w windows
 ipconfig /flushdns --> zresetowanie DNS w windows
 net use * /delete --> jak się robi sambe i żeby się przelogować to trzeba wyłączyć eksplorator plików, następnie w cmd wpisać tą komendę, wpisać T (czy tam yes nie pamiętam) i w menadżerze zadań znaleźć explorer.exe, PPM i dać uruchom ponownie
 
+
+DODAWANIE ZASADY DO ADDS ZEBY WYMUSIC INSTALWOANIE 7-ZIP (ARKUSZ 9)
+gpmc.msc --> Zarządzanie zasadami grupy w domenie 
+
+win + r --> gpmc.msc --> rozwiń las --> rozwiń domeny --> rozwiń swoja domene (np. egzamin.local) --> rozwiń Komputery pracowników --> PPM na Komputery pracownikow --> Utwórz obiekt zasad grupy w tej domenie i umieść tu link --> wpisuje sie nazwe jaka sie chce np Instalacja 7-Zip --> OK --> PPM na nowa zasadę --> Edytuj --> wejdzie teraz do edytora zarządzania zasadami grupy dla tej zasady --> rozwiń Konfiguracja komputera --> rozwiń Zasady --> rozwiń Ustawienia oprogramowania --> rozwiń Instalacja oprogramowania --> PPM na Instalacja oprogramowania --> Nowy --> Pakiet --> wybiera się pakiet taki jak w arkuszu (w arkuszu 9 to jest C:/Programy/7-Zip.msi) (ten plik sie kopiuje z pendrive na egzaminie) --> Kliknac na to i potem otwórz --> Przypisany --> OK.                 Potem sie wpisuje w cmd gpupdate /force a potem sie wylacza i wlacza kompa (wtedy powinno zainstalowac ten plik na klienta)
+
+gpupdate /force --> wymusza natychmiastowe zastosowanie zmian z gpmc.msc na komputerze klienckim. 
+
+
+
 SIECI / OKABLOWANIE
 
 Kabel krosowy (często nazywany patchcordem) to krótki, elastyczny przewód używany do łączenia urządzeń w sieciach komputerowych lub systemach audio/wideo 
