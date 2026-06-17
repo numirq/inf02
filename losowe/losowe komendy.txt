@@ -1,12 +1,9 @@
 LINUX
 
-lshw - do sprawdzania RAM CPU GPU płyta główna i dyski (LINUX)
-dmidecode - model producent płyty głównej, sloty RAM wersja BIOS (LINUX)
+lshw - do sprawdzania RAM CPU GPU płyta główna i dyski (LINUX) (jest pobrane)
+dmidecode - model producent płyty głównej, sloty RAM wersja BIOS (LINUX) (trzeba pobrac --> podobno pobrane)
 named-checkconf --> w systemach Linux służące do sprawdzania poprawności składni plików konfiguracyjnych serwera DNS BIND / ewentualnie mozna napisac do jakiego pliku --> named-checkconf /etc/bind/db.mzsp.local
 uname -r --> do sprawdzania wersji systemu linux
-dmidecode --> trzeba pobrac i na linux pokazuje podzespoly itp
-lshw --> bez pobierania i na linux tez pokazuje podzespoly itp
-named-checkconf --> w systemach Linux służące do sprawdzania poprawności składni plików konfiguracyjnych serwera DNS BIND / ewentualnie mozna napisac do jakiego pliku --> named-checkconf /etc/bind/db.mzsp.local
 systemctl enable --now (nazwa uslug) --> automatyczne odpalanie uslugi, przy odpaleniu kompa
 hostnamectl hostname (nazwa serwera) --> ewentualnie jak nie dziala to mozna dac hostnamectl set-hostname (nazwa serwera) --> zmiana nazwy serwera na Linux
 
