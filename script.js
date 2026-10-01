@@ -8,17 +8,34 @@ const notesListElement = document.getElementById("notes-list");
 const noteTitleElement = document.getElementById("note-title");
 const noteContentElement = document.getElementById("note-content");
 const topic = document.body.dataset.topic;
+let availableNotes = [];
+let contentRequestId = 0;
+
+if (new URLSearchParams(window.location.search).get("year") === "3") {
+  const backButton = document.querySelector(".top-nav .nav-button");
+  if (backButton) {
+    backButton.textContent = "wstecz";
+    if (backButton.tagName === "A") {
+      backButton.href = "class3.html";
+    } else {
+      const homeLink = document.createElement("a");
+      homeLink.className = backButton.className;
+      homeLink.href = "class3.html";
+      homeLink.textContent = "wstecz";
+      backButton.replaceWith(homeLink);
+    }
+  }
+}
 
 if (topic && notesListElement && noteTitleElement && noteContentElement) {
-  setupUploadModal();
   loadNotes(topic);
 }
 
 async function loadNotes(folderName) {
-  renderMessage("ladowanie notatek");
+  renderMessage("wczytywanie notatek...");
 
   if (CONFIG.owner === "TWOJ_LOGIN_GITHUB" || CONFIG.repo === "TWOJE_REPO") {
-    renderMessage();
+    renderMessage("nie skonfigurowano repozytorium notatek.");
     return;
   }
 
@@ -32,15 +49,21 @@ async function loadNotes(folderName) {
     }
 
     const files = await response.json();
-    const supportedExtensions = /\.(txt|md|jpg|jpeg|png|gif|webp|pdf)$/i;
-    const noteFiles = files.filter((file) => supportedExtensions.test(file.name));
+    const supportedExtensions = /\.(txt|md|sql|py|sh|bat|ps1|js|html|css|csv|xlsx|xls|docx|doc|pptx|ppt|jpg|jpeg|png|gif|webp|pdf)$/i;
+    const noteFiles = files
+      .filter((file) => supportedExtensions.test(file.name))
+      .sort((first, second) => first.name.localeCompare(second.name, "pl"));
+    const panelDescription = document.querySelector(".panel-description");
 
     if (noteFiles.length === 0) {
-      renderMessage();
+      panelDescription.textContent = "0 plików";
+      renderMessage("brak notatek w tej kategorii.");
       return;
     }
 
     notesListElement.innerHTML = "";
+    availableNotes = noteFiles;
+    panelDescription.textContent = `${noteFiles.length} ${getFileCountLabel(noteFiles.length)}`;
 
     noteFiles.forEach((file, index) => {
       const listItem = document.createElement("li");
@@ -61,13 +84,27 @@ async function loadNotes(folderName) {
       }
     });
   } catch (error) {
-    renderMessage(`nie udało sie pobrac listy plikow ${error.message}`);
+    const message = error instanceof Error ? error.message : "nieznany błąd";
+    renderMessage(`nie udało się pobrać listy plików. ${message}`);
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.className = "nav-button";
+    retry.textContent = "spróbuj ponownie";
+    retry.addEventListener("click", () => loadNotes(folderName));
+    noteContentElement.appendChild(retry);
   }
 }
 
+function getFileCountLabel(count) {
+  if (count === 1) return "plik";
+  if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) return "pliki";
+  return "plików";
+}
+
 async function loadNoteContent(file) {
+  const requestId = ++contentRequestId;
   noteTitleElement.textContent = file.name;
-  noteContentElement.innerHTML = "ladowanie";
+  noteContentElement.textContent = "wczytywanie...";
 
   const extension = (file.name.split(".").pop() || "").toLowerCase();
 
@@ -81,6 +118,11 @@ async function loadNoteContent(file) {
     return;
   }
 
+  if (["xlsx", "xls", "docx", "doc", "pptx", "ppt"].includes(extension)) {
+    renderDownloadFile(file);
+    return;
+  }
+
   try {
     const response = await fetch(file.download_url);
 
@@ -89,9 +131,24 @@ async function loadNoteContent(file) {
     }
 
     const content = await response.text();
-    renderTextContent(content);
+    if (requestId !== contentRequestId) return;
+    if (extension === "csv") {
+      renderCsvContent(content);
+      return;
+    }
+
+    const relatedImage = findRelatedImage(file);
+    if (extension === "md") {
+      renderMarkdown(content, file);
+      appendRelatedImage(relatedImage);
+      return;
+    }
+
+    renderTextContent(content, relatedImage, extension);
   } catch (error) {
-    noteContentElement.textContent = `nie udalo sie wczytac pliku ${error.message}`;
+    if (requestId !== contentRequestId) return;
+    const message = error instanceof Error ? error.message : "nieznany błąd";
+    renderError(`nie udało się wczytać pliku. ${message}`);
   }
 }
 
@@ -103,7 +160,7 @@ function renderImage(file) {
   image.loading = "lazy";
 
   image.addEventListener("error", () => {
-    noteContentElement.textContent = "nie udalo sie wyswietlic";
+    renderError("nie udało się wyświetlić obrazu.");
   });
 
   noteContentElement.appendChild(image);
@@ -118,22 +175,436 @@ function renderPdf(file) {
 
   const fallback = document.createElement("p");
   fallback.className = "note-meta";
-  fallback.innerHTML = `przegladarka nie obsloguje pdf <a href="${file.download_url}" target="_blank" rel="noopener noreferrer">otworz plik PDF</a>.`;
+  fallback.textContent = "jeśli podgląd nie działa, ";
+  const link = document.createElement("a");
+  link.href = file.download_url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "otwórz plik PDF";
+  fallback.appendChild(link);
+  fallback.appendChild(document.createTextNode("."));
 
   object.appendChild(fallback);
   noteContentElement.appendChild(object);
 }
 
-function renderTextContent(content) {
+function renderDownloadFile(file) {
+  noteContentElement.innerHTML = "";
+  const message = document.createElement("p");
+  message.className = "note-meta";
+  message.textContent = "tego pliku nie można wyświetlić w podglądzie.";
+  const link = document.createElement("a");
+  link.className = "nav-button";
+  link.href = file.download_url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "otwórz lub pobierz plik";
+  noteContentElement.append(message, link);
+}
+
+function renderTextContent(content, relatedImage, extension = "txt") {
   if (topic === "linki") {
     renderLinkiContent(content);
     return;
   }
 
+  if (extension === "txt") {
+    renderPlainTextNote(content);
+    appendRelatedImage(relatedImage);
+    return;
+  }
+
   noteContentElement.innerHTML = "";
   const pre = document.createElement("pre");
-  pre.textContent = content;
+  const code = document.createElement("code");
+  code.textContent = content;
+  pre.appendChild(code);
+  if (["sql", "py", "sh", "bat", "ps1", "js", "html", "css"].includes(extension)) {
+    pre.classList.add("code-block");
+    code.className = `language-${extension}`;
+    pre.dataset.language = extension;
+  }
   noteContentElement.appendChild(pre);
+  appendRelatedImage(relatedImage);
+}
+
+function renderPlainTextNote(content) {
+  noteContentElement.innerHTML = "";
+  const lines = content.replace(/\r\n?/g, "\n").split("\n");
+  let index = 0;
+
+  while (index < lines.length) {
+    const currentLine = lines[index];
+    const trimmed = currentLine.trim();
+
+    if (!trimmed) {
+      index += 1;
+      continue;
+    }
+
+    const heading = trimmed.match(/^(?:#{2,6}\s*(.+)|#([^\s#].*))$/);
+    if (heading) {
+      appendPlainTextHeading((heading[1] || heading[2]).trim(), 2);
+      index += 1;
+      continue;
+    }
+
+    if (isPlainTextListItem(trimmed)) {
+      const ordered = /^\d+[.)]\s+/.test(trimmed);
+      const list = document.createElement(ordered ? "ol" : "ul");
+      while (index < lines.length && isPlainTextListItem(lines[index].trim())) {
+        const item = document.createElement("li");
+        item.textContent = lines[index].trim().replace(/^(?:[-*+]|\u2022|\d+[.)])\s+/, "");
+        list.appendChild(item);
+        index += 1;
+      }
+      noteContentElement.appendChild(list);
+      continue;
+    }
+
+    const paragraphLines = [currentLine];
+    index += 1;
+    while (index < lines.length && lines[index].trim() && !/^(?:#{2,6}\s*\S|#[^\s#]\S*)/.test(lines[index].trim()) && !isPlainTextListItem(lines[index].trim())) {
+      paragraphLines.push(lines[index]);
+      index += 1;
+    }
+
+    const paragraph = document.createElement("p");
+    paragraph.textContent = paragraphLines.join("\n");
+    noteContentElement.appendChild(paragraph);
+  }
+}
+
+function appendPlainTextHeading(text, level) {
+  const heading = document.createElement(level === 2 ? "h2" : "h3");
+  heading.textContent = text;
+  noteContentElement.appendChild(heading);
+}
+
+function isPlainTextListItem(line) {
+  return /^(?:[-*+]|\u2022|\d+[.)])\s+/.test(line);
+}
+
+function appendRelatedImage(relatedImage) {
+  if (relatedImage) {
+    appendOpenButton(relatedImage.download_url, "otwórz zdjęcie w nowej karcie");
+
+    const image = document.createElement("img");
+    image.src = relatedImage.download_url;
+    image.alt = relatedImage.name;
+    image.loading = "lazy";
+    image.addEventListener("error", () => {
+      const error = document.createElement("p");
+      error.className = "note-error";
+      error.textContent = "nie udało się wyświetlić powiązanego zdjęcia.";
+      image.replaceWith(error);
+    });
+    noteContentElement.appendChild(image);
+  }
+}
+
+function renderMarkdown(content, sourceFile) {
+  noteContentElement.innerHTML = "";
+  const lines = content.replace(/\r\n?/g, "\n").split("\n");
+  let index = 0;
+
+  while (index < lines.length) {
+    const line = lines[index];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      index += 1;
+      continue;
+    }
+
+    const fence = trimmed.match(/^```([\w+-]*)\s*$/);
+    if (fence) {
+      const codeLines = [];
+      index += 1;
+      while (index < lines.length && !/^\s*```\s*$/.test(lines[index])) {
+        codeLines.push(lines[index]);
+        index += 1;
+      }
+      if (index < lines.length) index += 1;
+      const pre = document.createElement("pre");
+      pre.className = "code-block";
+      if (fence[1]) pre.dataset.language = fence[1].toLowerCase();
+      const code = document.createElement("code");
+      code.textContent = codeLines.join("\n");
+      pre.appendChild(code);
+      noteContentElement.appendChild(pre);
+      continue;
+    }
+
+    const heading = trimmed.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const element = document.createElement(`h${heading[1].length}`);
+      appendInlineMarkdown(element, heading[2], sourceFile);
+      noteContentElement.appendChild(element);
+      index += 1;
+      continue;
+    }
+
+    if (isMarkdownTableRow(trimmed) && index + 1 < lines.length && isMarkdownTableDivider(lines[index + 1])) {
+      index = renderMarkdownTable(lines, index, sourceFile);
+      continue;
+    }
+
+    if (/^>\s?/.test(trimmed)) {
+      const quote = document.createElement("blockquote");
+      while (index < lines.length && /^\s*>/.test(lines[index])) {
+        const paragraph = document.createElement("p");
+        appendInlineMarkdown(paragraph, lines[index].replace(/^\s*>\s?/, ""), sourceFile);
+        quote.appendChild(paragraph);
+        index += 1;
+      }
+      noteContentElement.appendChild(quote);
+      continue;
+    }
+
+    const listMatch = trimmed.match(/^(\s*)([-*+]|\d+\.)\s+(.+)$/);
+    if (listMatch) {
+      const ordered = /^\d/.test(listMatch[2]);
+      const list = document.createElement(ordered ? "ol" : "ul");
+      while (index < lines.length) {
+        const itemMatch = lines[index].match(/^\s*(?:[-*+]|\d+\.)\s+(.+)$/);
+        if (!itemMatch) break;
+        const item = document.createElement("li");
+        appendInlineMarkdown(item, itemMatch[1], sourceFile);
+        list.appendChild(item);
+        index += 1;
+      }
+      noteContentElement.appendChild(list);
+      continue;
+    }
+
+    const paragraph = document.createElement("p");
+    appendInlineMarkdown(paragraph, trimmed, sourceFile);
+    noteContentElement.appendChild(paragraph);
+    index += 1;
+  }
+}
+
+function isMarkdownTableRow(line) {
+  return line.includes("|");
+}
+
+function isMarkdownTableDivider(line) {
+  const cells = splitMarkdownTableRow(line);
+  return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell.trim()));
+}
+
+function splitMarkdownTableRow(line) {
+  return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim());
+}
+
+function renderMarkdownTable(lines, startIndex, sourceFile) {
+  const headers = splitMarkdownTableRow(lines[startIndex]);
+  const table = document.createElement("table");
+  table.className = "markdown-table";
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+
+  headers.forEach((header) => {
+    const cell = document.createElement("th");
+    appendInlineMarkdown(cell, header, sourceFile);
+    headerRow.appendChild(cell);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  let index = startIndex + 2;
+  while (index < lines.length && lines[index].includes("|") && lines[index].trim()) {
+    const row = document.createElement("tr");
+    splitMarkdownTableRow(lines[index]).forEach((value, cellIndex) => {
+      const cell = document.createElement("td");
+      appendInlineMarkdown(cell, value, sourceFile);
+      if (cellIndex < headers.length) row.appendChild(cell);
+    });
+    tbody.appendChild(row);
+    index += 1;
+  }
+  table.appendChild(tbody);
+  noteContentElement.appendChild(table);
+  return index;
+}
+
+function appendInlineMarkdown(parent, text, sourceFile) {
+  const tokenPattern = /(!?\[([^\]]*)\]\(([^)]+)\)|`([^`]+)`|\*\*([^*]+)\*\*|__([^_]+)__|\*([^*]+)\*|_([^_]+)_)/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = tokenPattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parent.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+    }
+
+    if (match[1].startsWith("!")) {
+      const imageUrl = resolveMarkdownUrl(match[3], sourceFile.download_url, true);
+      if (imageUrl) {
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = match[2];
+        image.loading = "lazy";
+        image.addEventListener("error", () => image.replaceWith(document.createTextNode("nie udało się wczytać obrazka")));
+        parent.appendChild(image);
+      } else {
+        parent.appendChild(document.createTextNode(match[2]));
+      }
+    } else if (match[1].startsWith("[")) {
+      const href = resolveMarkdownUrl(match[3], sourceFile.download_url, false);
+      if (href) {
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = match[2];
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        parent.appendChild(link);
+      } else {
+        parent.appendChild(document.createTextNode(match[2]));
+      }
+    } else if (match[4]) {
+      const code = document.createElement("code");
+      code.textContent = match[4];
+      parent.appendChild(code);
+    } else {
+      const wrapper = document.createElement(match[5] || match[6] ? "strong" : "em");
+      appendInlineMarkdown(wrapper, match[5] || match[6] || match[7] || match[8], sourceFile);
+      parent.appendChild(wrapper);
+    }
+    lastIndex = tokenPattern.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parent.appendChild(document.createTextNode(text.slice(lastIndex)));
+  }
+}
+
+function resolveMarkdownUrl(value, sourceUrl, isImage) {
+  try {
+    const resolved = new URL(value, sourceUrl);
+    const allowedProtocols = isImage ? ["https:"] : ["https:", "http:", "mailto:"];
+    return allowedProtocols.includes(resolved.protocol) ? resolved.href : null;
+  } catch {
+    return null;
+  }
+}
+
+function renderCsvContent(content) {
+  const rows = parseCsv(content);
+  noteContentElement.innerHTML = "";
+
+  if (rows.length === 0) {
+    noteContentElement.textContent = "plik csv jest pusty.";
+    return;
+  }
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "csv-table-wrapper";
+  const table = document.createElement("table");
+  table.className = "csv-table";
+  const head = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  rows[0].forEach((value) => {
+    const cell = document.createElement("th");
+    cell.textContent = value;
+    headerRow.appendChild(cell);
+  });
+  head.appendChild(headerRow);
+  table.appendChild(head);
+
+  const body = document.createElement("tbody");
+  rows.slice(1).forEach((values) => {
+    const row = document.createElement("tr");
+    rows[0].forEach((_, index) => {
+      const cell = document.createElement("td");
+      cell.textContent = values[index] || "";
+      row.appendChild(cell);
+    });
+    body.appendChild(row);
+  });
+  table.appendChild(body);
+  wrapper.appendChild(table);
+  noteContentElement.appendChild(wrapper);
+}
+
+function parseCsv(content) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let quoted = false;
+  const input = content.replace(/^\uFEFF/, "");
+  const delimiter = detectCsvDelimiter(input);
+
+  for (let index = 0; index < input.length; index += 1) {
+    const character = input[index];
+    if (character === '"' && quoted && input[index + 1] === '"') {
+      cell += '"';
+      index += 1;
+    } else if (character === '"') {
+      quoted = !quoted;
+    } else if (character === delimiter && !quoted) {
+      row.push(cell);
+      cell = "";
+    } else if ((character === "\n" || character === "\r") && !quoted) {
+      if (character === "\r" && input[index + 1] === "\n") index += 1;
+      row.push(cell);
+      if (row.some((value) => value.length > 0)) rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += character;
+    }
+  }
+
+  row.push(cell);
+  if (row.some((value) => value.length > 0)) rows.push(row);
+  return rows;
+}
+
+function detectCsvDelimiter(content) {
+  const firstLine = content.split(/\r?\n/, 1)[0] || "";
+  let quoted = false;
+  let commas = 0;
+  let semicolons = 0;
+
+  for (let index = 0; index < firstLine.length; index += 1) {
+    if (firstLine[index] === '"' && firstLine[index + 1] === '"' && quoted) {
+      index += 1;
+    } else if (firstLine[index] === '"') {
+      quoted = !quoted;
+    } else if (!quoted && firstLine[index] === ",") {
+      commas += 1;
+    } else if (!quoted && firstLine[index] === ";") {
+      semicolons += 1;
+    }
+  }
+
+  return semicolons > commas ? ";" : ",";
+}
+
+function findRelatedImage(textFile) {
+  const textBaseName = textFile.name.replace(/\.[^.]+$/, "").toLocaleLowerCase("pl");
+  const imageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+
+  return availableNotes.find((file) => {
+    const imageBaseName = file.name.replace(/\.[^.]+$/, "").toLocaleLowerCase("pl");
+    return imageExtensions.test(file.name) && imageBaseName === textBaseName;
+  });
+}
+
+function appendOpenButton(url, label) {
+  const actions = document.createElement("div");
+  actions.className = "note-preview-actions";
+  const link = document.createElement("a");
+  link.className = "nav-button";
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = label;
+  actions.appendChild(link);
+  noteContentElement.appendChild(actions);
 }
 
 function renderLinkiContent(content) {
@@ -142,29 +613,42 @@ function renderLinkiContent(content) {
   const container = document.createElement("div");
 
   lines.forEach((line) => {
-    const trimmed = line.trim();
-
-    if (!trimmed) {
+    if (!line.trim()) {
       container.appendChild(document.createElement("br"));
       return;
     }
 
-    if (/^https?:\/\//i.test(trimmed)) {
+    const paragraph = document.createElement("p");
+    const urlPattern = /https?:\/\/[^\s<>"']+/gi;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = urlPattern.exec(line)) !== null) {
+      let url = match[0];
+      let trailing = "";
+      while (/[),.;!?]$/.test(url)) {
+        trailing = url.slice(-1) + trailing;
+        url = url.slice(0, -1);
+      }
+
+      if (match.index > lastIndex) {
+        paragraph.appendChild(document.createTextNode(line.slice(lastIndex, match.index)));
+      }
+
       const link = document.createElement("a");
-      link.href = trimmed;
-      link.textContent = trimmed;
+      link.href = url;
+      link.textContent = url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.className = "note-link";
-
-      const listItem = document.createElement("div");
-      listItem.appendChild(link);
-      container.appendChild(listItem);
-      return;
+      paragraph.appendChild(link);
+      if (trailing) paragraph.appendChild(document.createTextNode(trailing));
+      lastIndex = match.index + match[0].length;
     }
 
-    const paragraph = document.createElement("p");
-    paragraph.textContent = line;
+    if (lastIndex < line.length) {
+      paragraph.appendChild(document.createTextNode(line.slice(lastIndex)));
+    }
     container.appendChild(paragraph);
   });
 
@@ -177,162 +661,16 @@ function selectButton(activeButton) {
   activeButton.classList.add("active");
 }
 
-function renderMessage(message) {
+function renderMessage(message = "brak notatek w tej kategorii.") {
   notesListElement.innerHTML = "";
   noteTitleElement.textContent = "notatka";
   noteContentElement.textContent = message;
 }
 
-function setupUploadModal() {
-  const openButton = document.getElementById("open-upload-modal");
-  const modal = document.getElementById("upload-modal");
-  const cancelButton = document.getElementById("upload-cancel");
-  const submitButton = document.getElementById("upload-submit");
-  const tokenInput = document.getElementById("upload-token");
-  const fileInput = document.getElementById("note-file");
-  const overwriteInput = document.getElementById("overwrite-file");
-  const statusElement = document.getElementById("upload-status");
-
-  if (!openButton || !modal || !cancelButton || !submitButton) {
-    return;
-  }
-
-  openButton.addEventListener("click", () => {
-    modal.hidden = false;
-    statusElement.textContent = "";
-    tokenInput.value = "";
-  });
-
-  cancelButton.addEventListener("click", () => {
-    modal.hidden = true;
-  });
-
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.hidden = true;
-    }
-  });
-
-  submitButton.addEventListener("click", async () => {
-    const token = tokenInput.value.trim();
-    const file = fileInput.files?.[0];
-    const commitMessage = "nowa notatka";
-    const overwrite = overwriteInput.checked;
-
-    if (!token) {
-      statusElement.textContent = "token";
-      return;
-    }
-
-    if (!file) {
-      statusElement.textContent = "wybierz plik";
-      return;
-    }
-
-    statusElement.textContent = "wysylanie";
-    submitButton.disabled = true;
-
-    try {
-      await uploadFileToGitHub({ token, file, commitMessage, overwrite });
-      statusElement.textContent = "plik dodany";
-      fileInput.value = "";
-      overwriteInput.checked = false;
-      await loadNotes(topic);
-      setTimeout(() => {
-        modal.hidden = true;
-      }, 600);
-    } catch (error) {
-      statusElement.textContent = `blad ${error.message}`;
-    } finally {
-      submitButton.disabled = false;
-    }
-  });
-}
-
-
-function createAuthHeader(token) {
-  return token.startsWith("github_pat_") ? `token ${token}` : `Bearer ${token}`;
-}
-
-async function uploadFileToGitHub({ token, file, commitMessage, overwrite }) {
-  const path = `${topic}/${encodeURIComponent(file.name)}`;
-  const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}`;
-  const authHeader = createAuthHeader(token);
-
-  let sha;
-  const existingResponse = await fetch(`${apiUrl}?ref=${CONFIG.branch}`, {
-    headers: {
-      Authorization: authHeader,
-      Accept: "application/vnd.github+json",
-    },
-  });
-
-  if (existingResponse.status === 401) {
-    throw new Error("blad token");
-  }
-
-  if (existingResponse.ok) {
-    const existingFile = await existingResponse.json();
-    sha = existingFile.sha;
-
-    if (!overwrite) {
-      throw new Error("plik juz jest");
-    }
-  }
-
-  if (!existingResponse.ok && existingResponse.status !== 404) {
-    throw new Error(`nie da sie sprawdzic (${existingResponse.status}).`);
-  }
-
-  const arrayBuffer = await file.arrayBuffer();
-  const contentBase64 = arrayBufferToBase64(arrayBuffer);
-
-  const body = {
-    message: commitMessage,
-    content: contentBase64,
-    branch: CONFIG.branch,
-  };
-
-  if (sha) {
-    body.sha = sha;
-  }
-
-  const uploadResponse = await fetch(apiUrl, {
-    method: "PUT",
-    headers: {
-      Authorization: authHeader,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!uploadResponse.ok) {
-    if (uploadResponse.status === 401) {
-      throw new Error("cos tam tokenem jest nie tak");
-    }
-
-    const details = await safeJson(uploadResponse);
-    const message = details?.message || `GitHub API zwróciło ${uploadResponse.status}`;
-    throw new Error(message);
-  }
-}
-
-async function safeJson(response) {
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
-}
-
-function arrayBufferToBase64(buffer) {
-  const bytes = new Uint8Array(buffer);
-  let binary = "";
-
-  for (const byte of bytes) {
-    binary += String.fromCharCode(byte);
-  }
-
-  return btoa(binary);
+function renderError(message) {
+  noteContentElement.innerHTML = "";
+  const error = document.createElement("p");
+  error.className = "note-error";
+  error.textContent = message;
+  noteContentElement.appendChild(error);
 }
