@@ -1,0 +1,21 @@
+bazy danych — podstawy
+
+baza danych służy do przechowywania i porządkowania informacji.
+
+podstawowe pojęcia:
+- tabela — przechowuje dane w wierszach i kolumnach
+- rekord — jeden wiersz tabeli
+- pole — pojedyncza kolumna tabeli
+- klucz główny — jednoznacznie identyfikuje rekord
+- klucz obcy — łączy dane z innej tabeli
+
+przykładowa tabela użytkownicy:
+
+id | imie   | email
+1  | anna   | anna@example.com
+2  | piotr  | piotr@example.com
+
+przykładowe polecenie sql:
+
+select imie, email
+from uzytkownicy;
