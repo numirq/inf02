@@ -11,20 +11,18 @@ const topic = document.body.dataset.topic;
 let availableNotes = [];
 let contentRequestId = 0;
 
+const classCrumb = document.querySelector("[data-class-crumb]");
+const classSeparator = document.querySelector("[data-class-separator]");
+const currentCrumb = document.querySelector(".breadcrumb-current");
+const topicHeading = document.querySelector(".notes-list-panel h1");
+
+if (currentCrumb && topicHeading) {
+  currentCrumb.textContent = topicHeading.textContent.replace(/^notatki\s*/i, "").trim();
+}
+
 if (new URLSearchParams(window.location.search).get("year") === "3") {
-  const backButton = document.querySelector(".top-nav .nav-button");
-  if (backButton) {
-    backButton.textContent = "wstecz";
-    if (backButton.tagName === "A") {
-      backButton.href = "class3.html";
-    } else {
-      const homeLink = document.createElement("a");
-      homeLink.className = backButton.className;
-      homeLink.href = "class3.html";
-      homeLink.textContent = "wstecz";
-      backButton.replaceWith(homeLink);
-    }
-  }
+  if (classCrumb) classCrumb.hidden = false;
+  if (classSeparator) classSeparator.hidden = false;
 }
 
 if (topic && notesListElement && noteTitleElement && noteContentElement) {
