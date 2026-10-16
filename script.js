@@ -49,7 +49,7 @@ async function loadNotes(folderName) {
     const files = await response.json();
     const supportedExtensions = /\.(txt|md|sql|py|sh|bat|ps1|js|html|css|csv|xlsx|xls|docx|doc|pptx|ppt|jpg|jpeg|png|gif|webp|pdf)$/i;
     const noteFiles = files
-      .filter((file) => supportedExtensions.test(file.name))
+      .filter((file) => supportedExtensions.test(file.name) && !/^lekcja\d+\.html$/i.test(file.name))
       .sort((first, second) => first.name.localeCompare(second.name, "pl"));
     const panelDescription = document.querySelector(".panel-description");
 
