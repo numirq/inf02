@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lekcja 1 — bazy danych</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      .lesson-content {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1rem 2rem;
+      }
+
+      .lesson-panel {
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .lesson-intro {
+        margin-top: 0;
+        color: var(--muted);
+      }
+
+      .lesson-instruction {
+        display: block;
+        width: 100%;
+        max-height: 60vh;
+        margin: 1rem 0;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: white;
+        object-fit: contain;
+      }
+
+      .lesson-files {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+      }
+
+      .lesson-note {
+        line-height: 1.7;
+      }
+
+      .lesson-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .lesson-gallery figure {
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--panel-soft);
+      }
+
+      .lesson-gallery img {
+        display: block;
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      .lesson-gallery figcaption {
+        padding: 0.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav">
+      <nav class="breadcrumbs" aria-label="Nawigacja okruszkowa">
+        <a class="nav-button" href="../index.html">notatki</a>
+        <span class="breadcrumb-separator" aria-hidden="true">/</span>
+        <a class="nav-button" href="../bazy-danych.html">bazy danych</a>
+        <span class="breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="breadcrumb-current" aria-current="page">lekcja 1</span>
+      </nav>
+    </header>
+
+    <main class="lesson-content">
+      <section class="lesson-panel">
+        <h1>Lekcja 1 — tworzenie tabel w Accessie</h1>
+        <p class="lesson-intro">Notatka, pliki Access i zdjęcia z pierwszej lekcji.</p>
+        <p>
+          <a class="nav-button" href="lekcja1.zip" download="lekcja1.zip">
+            Pobierz cały folder lekcji (ZIP)
+          </a>
+        </p>
+        <img
+          class="lesson-instruction"
+          src="lekcja1/bazy_danych_1.png"
+          alt="Schemat tabeli z kolumnami i rekordami"
+        />
+
+        <h2>Pliki Access</h2>
+        <div class="lesson-files">
+          <a class="nav-button" href="lekcja1/PierwszaBaza.accdb" download>PierwszaBaza.accdb</a>
+          <a class="nav-button" href="lekcja1/DrugaBaza.accdb" download>DrugaBaza.accdb</a>
+        </div>
+
+        <h2>Notatka</h2>
+        <div class="lesson-note">
+          <h3>Tworzenie tabeli w programie Access</h3>
+          <h3>Zasady nadawania nazw tabelom i polom w tabeli</h3>
+          <p>6 zasad projektowania baz danych:</p>
+          <ol>
+            <li>Używaj krótkich i prostych nazw.</li>
+            <li>Stosuj konsekwentne nazewnictwo (np. wielkie litery lub małe litery we wszystkich nazwach).</li>
+            <li>Unikaj spacji w nazwach.</li>
+            <li>Bądź konsekwentny w stosowaniu nazw.</li>
+            <li>Nie powtarzaj nazw tabel i pól.</li>
+            <li>Nie dodawaj do nazw pól słowa „Name”.</li>
+          </ol>
+          <h3>Dodatkowe zasady</h3>
+          <ul>
+            <li>Dziel informacje.</li>
+            <li>Umieszczaj wszystkie szczegóły w jednym miejscu.</li>
+            <li>Unikaj powtarzania informacji.</li>
+            <li>Unikaj zbędnych informacji.</li>
+          </ul>
+          <a href="lekcja1/bazy_danych_1.md">Otwórz oryginalny plik notatki</a>
+        </div>
+
+        <h2>Zdjęcia z lekcji</h2>
+        <div class="lesson-gallery">
+          <figure><img src="lekcja1/cini.jpg" alt="Zdjęcie cini" loading="lazy" /><figcaption>cini.jpg</figcaption></figure>
+          <figure><img src="lekcja1/kamil.jpg" alt="Zdjęcie kamil" loading="lazy" /><figcaption>kamil.jpg</figcaption></figure>
+          <figure><img src="lekcja1/Fiat.jpg" alt="Samochód Fiat" loading="lazy" /><figcaption>Fiat.jpg</figcaption></figure>
+          <figure><img src="lekcja1/Ford.jpg" alt="Samochód Ford" loading="lazy" /><figcaption>Ford.jpg</figcaption></figure>
+          <figure><img src="lekcja1/Infiniti.jpg" alt="Samochód Infiniti" loading="lazy" /><figcaption>Infiniti.jpg</figcaption></figure>
+          <figure><img src="lekcja1/Jaguar.jpg" alt="Samochód Jaguar" loading="lazy" /><figcaption>Jaguar.jpg</figcaption></figure>
+          <figure><img src="lekcja1/Mercedes-Benz.jpg" alt="Samochód Mercedes-Benz" loading="lazy" /><figcaption>Mercedes-Benz.jpg</figcaption></figure>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -197,6 +197,42 @@ h1 {
   font-size: 0.92rem;
 }
 
+.lesson-links {
+  margin: 1rem 0;
+}
+
+.lesson-links h2 {
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+}
+
+.lesson-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.lesson-link:hover,
+.lesson-link:focus-visible {
+  border-color: var(--accent);
+  background: #1e3a5f;
+}
+
+.lesson-link-title {
+  font-weight: bold;
+}
+
+.lesson-link-description {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .notes-list {
   list-style: none;
   padding: 0;
