@@ -175,6 +175,13 @@ h1 {
   border-color: var(--accent);
 }
 
+@media (min-width: 769px) and (max-width: 780px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(220px, 220px));
+    max-width: 500px;
+  }
+}
+
 .notes-page {
   display: grid;
   grid-template-columns: 300px 1fr;

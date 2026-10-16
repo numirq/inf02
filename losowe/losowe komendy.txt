@@ -1,7 +1,7 @@
 LINUX
 
 lshw - do sprawdzania RAM CPU GPU płyta główna i dyski (LINUX) (jest pobrane)
-dmidecode - model producent płyty głównej, sloty RAM wersja BIOS (LINUX) (trzeba pobrac --> podobno pobrane)
+dmidecode - informacje o BIOS-ie, płycie głównej, pamięci RAM i procesorze (Linux)
 named-checkconf --> w systemach Linux służące do sprawdzania poprawności składni plików konfiguracyjnych serwera DNS BIND / ewentualnie mozna napisac do jakiego pliku --> named-checkconf /etc/bind/db.mzsp.local
 uname -r --> do sprawdzania wersji systemu linux
 systemctl enable --now (nazwa uslug) --> automatyczne odpalanie uslugi, przy odpaleniu kompa
@@ -19,7 +19,6 @@ w name się daje nazwę karty sieciowej a w set-name daje się nazwę taką jak�
 WINDOWS
 
 monitor wydajności - usuń wszystkie liczniki - nowy licznik - dysk fizyczny - czas odczytu dysku w %
-dxdiag - info o GPU, sterownikach audio DirectX i sprzęcie multimedialnym
 menedżer zadań – wydajność – CPU -wirtualizacja
 jak wyłączyć kalkulator
 secpol.msc - zasady zabezpieczeń lokalnych (np. do zablokowania konta po np. 5 nieudanych próbach logowania)
@@ -42,7 +41,7 @@ net use * /delete --> jak się robi sambe i żeby się przelogować to trzeba wy
 DODAWANIE ZASADY DO ADDS ZEBY WYMUSIC INSTALWOANIE 7-ZIP (ARKUSZ 9)
 gpmc.msc --> Zarządzanie zasadami grupy w domenie 
 
-win + r --> gpmc.msc --> rozwiń las --> rozwiń domeny --> rozwiń swoja domene (np. egzamin.local) --> rozwiń Komputery pracowników --> PPM na Komputery pracownikow --> Utwórz obiekt zasad grupy w tej domenie i umieść tu link --> wpisuje sie nazwe jaka sie chce np Instalacja 7-Zip --> OK --> PPM na nowa zasadę --> Edytuj --> wejdzie teraz do edytora zarządzania zasadami grupy dla tej zasady --> rozwiń Konfiguracja komputera --> rozwiń Zasady --> rozwiń Ustawienia oprogramowania --> rozwiń Instalacja oprogramowania --> PPM na Instalacja oprogramowania --> Nowy --> Pakiet --> wybiera się pakiet taki jak w arkuszu (w arkuszu 9 to jest C:/Programy/7-Zip.msi) (ten plik sie kopiuje z pendrive na egzaminie) --> Kliknac na to i potem otwórz --> Przypisany --> OK.                 Potem sie wpisuje w cmd gpupdate /force a potem sie wylacza i wlacza kompa (wtedy powinno zainstalowac ten plik na klienta)
+win + r --> gpmc.msc --> rozwiń las --> rozwiń domeny --> rozwiń swoja domene (np. egzamin.local) --> rozwiń Komputery pracowników --> PPM na Komputery pracownikow --> Utwórz obiekt zasad grupy w tej domenie i umieść tu link --> wpisuje sie nazwe jaka sie chce np Instalacja 7-Zip --> OK --> PPM na nowa zasadę --> Edytuj --> wejdzie teraz do edytora zarządzania zasadami grupy dla tej zasady --> rozwiń Konfiguracja komputera --> rozwiń Zasady --> rozwiń Ustawienia oprogramowania --> rozwiń Instalacja oprogramowania --> PPM na Instalacja oprogramowania --> Nowy --> Pakiet --> wybiera się pakiet taki jak w arkuszu (w arkuszu 9 to jest C:/Programy/7-Zip.msi) (ten plik sie kopiuje z pendrive na egzaminie) --> Kliknac na to i potem otwórz --> Przypisany --> OK.
 
 gpupdate /force --> wymusza natychmiastowe zastosowanie zmian z gpmc.msc na komputerze klienckim. 
 
@@ -61,13 +60,13 @@ dmidecode -t baseboard
 
 CPU
 lshw -c cpu
-dmidecode - t processor
+dmidecode -t processor
 lscpu
-cat proc/cpuinfo
+cat /proc/cpuinfo
 
 RAM
 lshw -c memory
-demidecode -t memory
+dmidecode -t memory
 free -m
 hwinfo --memory
 
@@ -88,17 +87,11 @@ lspci | grep -i "eth"
 System
 uname -a
 hostnamectl
-lsb_release - a
+lsb_release -a
 
 PRZYKLADOWE KOMENDY DO PLIKU
 ip a >> kartysieciowe.txt
-ip lspci | grep "VGA" >> grafika.txt
+lspci | grep -i "VGA" >> grafika.txt
 
 PRZYKLADOWA KONFIGURACJA DO PLIKU
 cat /etc/ssh/sshd_config >> /KOPIE/sshd_config.kopia
-
-jakieś komendy mateusza
-gpupdate /force --> wymusza natychmiastowe zastosowanie zmian z gpmc.msc na komputerze klienckim. 
-gpmc.msc --> Zarządzanie zasadami grupy w domenie 
-
-win + r --> gpmc.msc --> rozwiń las --> rozwiń domeny --> rozwiń swoja domene (np. egzamin.local) --> rozwiń Komputery pracowników --> PPM na Komputery pracownikow --> Utwórz obiekt zasad grupy w tej domenie i umieść tu link --> wpisuje sie nazwe jaka sie chce np Instalacja 7-Zip --> OK --> PPM na nowa zasadę --> Edytuj --> wejdzie teraz do edytora zarządzania zasadami grupy dla tej zasady --> rozwiń Konfiguracja komputera --> rozwiń Zasady --> rozwiń Ustawienia oprogramowania --> rozwiń Instalacja oprogramowania --> PPM na Instalacja oprogramowania --> Nowy --> Pakiet --> wybiera się pakiet taki jak w arkuszu (w arkuszu 9 to jest C:/Programy/7-Zip.msi) (ten plik sie kopiuje z pendrive na egzaminie) --> Kliknac na to i potem otwórz --> Przypisany --> OK.                 Potem sie wpisuje w cmd gpupdate /force a potem sie wylacza i wlacza kompa (wtedy powinno zainstalowac ten plik na klienta)
