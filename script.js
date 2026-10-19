@@ -47,7 +47,7 @@ async function loadNotes(folderName) {
     }
 
     const files = await response.json();
-    const supportedExtensions = /\.(txt|md|sql|py|sh|bat|ps1|js|html|css|csv|xlsx|xls|docx|doc|pptx|ppt|jpg|jpeg|png|gif|webp|pdf)$/i;
+    const supportedExtensions = /\.(txt|md|sql|py|sh|bat|ps1|js|html|css|cpp|cc|cxx|h|hpp|csv|xlsx|xls|docx|doc|pptx|ppt|jpg|jpeg|png|gif|webp|pdf)$/i;
     const noteFiles = files
       .filter((file) => supportedExtensions.test(file.name) && !/^lekcja\d+\.html$/i.test(file.name))
       .sort((first, second) => first.name.localeCompare(second.name, "pl"));
@@ -217,7 +217,7 @@ function renderTextContent(content, relatedImage, extension = "txt") {
   const code = document.createElement("code");
   code.textContent = content;
   pre.appendChild(code);
-  if (["sql", "py", "sh", "bat", "ps1", "js", "html", "css"].includes(extension)) {
+  if (["sql", "py", "sh", "bat", "ps1", "js", "html", "css", "cpp", "cc", "cxx", "h", "hpp"].includes(extension)) {
     pre.classList.add("code-block");
     code.className = `language-${extension}`;
     pre.dataset.language = extension;
